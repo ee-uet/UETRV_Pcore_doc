@@ -1,10 +1,9 @@
 ## UETRV_Pcore  
-UETRV_Pcore is a RISC-V based Embedded class SoC integrating 3-stage pipelined core with multiple peripherals for embedded applications. Currently, the core implements RV32IMA ISA based on User-level ISA Version 2.0 and Privileged Architecture Version 1.11 supporting M/S/U mode. Following is the status of current implementation:
+UETRV_Pcore is a RISC-V based application class SoC integrating a 5-stage pipelined processor with memory and peripherals. Currently, the core implements RV32IMA ISA based on User-level ISA Version 2.0 and Privileged Architecture Version 1.11 supporting M/S/U mode. Following is the status of current implementation:
 
-- Machine level and Supervisor level interrupts has been added, including the support for vectored interrupts.
-- External interrupts are supported using bits 16 and above of MIP & MIE CSRs as provisioned by Privileged Architecture Version 1.11. 
+- Machine level and Supervisor level interrupts have been added, including the support for vectored interrupts.
 - Data hazards are resolved using forwarding, while Load-Use hazard leads to one cycle stall. 
-- The system boots from external flash using SPI interface.
+- The system boots using on chip boot memory.
 
 ### Core Block Diagram
 <img src="docs/soc.png" alt="soc" width="700"/>
@@ -33,14 +32,14 @@ Check that these tools are installed correctly, by running `verilator --version`
 
 ### Build Model and Run Simulation
 
-Verilator model of Pcore can be built using Makefil:
+Verilator model of Pcore can be built using Makefile:
 
     make verilate
 
 The verilator model is build under `ver_work/Vpcore_sim`. The executeable can accept the following three parameters:
 
 - `imem` : This paramerter accepts the file that contain the hexadecimal instructions of compiled program.
-- `max_cycles`: This parameter the maxiumum number of cycles for simulation. Simulation terminates after executing these number of cycles.
+- `max_cycles`: This parameter cotrols the maxiumum number of cycles for simulation. Simulation terminates after executing these many cycles.
 - `vcd`: This parameters accepts a boolean value. If it is 0, the waveform file `trace.vcd` will not be dumped and vice versa.
 
 An example program to print `HELLO` on UART is compiled and its hex instructions are availabe in [here](/software/example-uart/build/imem.txt). Run the folllowing command to simulate the example program
@@ -51,10 +50,10 @@ This will simulate `imem.txt` and dump UART logs in `uart_logdata.log`. If `vcd=
 
     gtkwave trace.vcd
 
-The `imem` and `max_cycles` by be overwritten in Makefile using.
+The `imem` and `max_cycles` may be overwritten in Makefile using.
 
     make sim-verilate imem=</path/to/hex/file> max_cycles=<No. of cycles> 
 
 ### Verification
 
-Pcore uses RISOF framework to run Architecture Compatibility Tests (ACTs). Instructions to run these tests can be followed in [verif](/verif/) directory.
+UET_Pcore uses RISOF framework to run Architecture Compatibility Tests (ACTs). Instructions to run these tests can be followed in [verif](/verif/) directory.
