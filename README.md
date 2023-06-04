@@ -1,27 +1,22 @@
 ## UETRV_Pcore  
-UETRV_Pcore is a RISC-V based application class SoC integrating a 5-stage pipelined processor with memory and peripherals. Currently, the core implements RV32IMA ISA based on User-level ISA Version 2.0 and Privileged Architecture Version 1.11 supporting M/S/U mode. Following is the status of current implementation:
+UETRV_Pcore is a RISC-V based application class SoC integrating a 5-stage pipelined processor with memory and peripherals. Currently, the core implements RV32IMAZicsr ISA based on User-level ISA Version 2.0 and Privileged Architecture Version 1.11 supporting M/S/U modes. Following are the key features of the SoC:
 
-- Machine level and Supervisor level interrupts have been added, including the support for vectored interrupts.
-- Data hazards are resolved using forwarding, while Load-Use hazard leads to one cycle stall. 
-- The system boots using on chip boot memory.
+### Key Features
+- 32-bit RISC-V ISA core that supports base integer (I) and multiplication and division (M), atomic (A) and Zicsr (Z) extensions (RV32IMAZicsr).
+- Supports user, supervisor and machine mode privilege levels.
+- Support for instruction / data (writeback) caches.
+- Sv32 based MMU support and is capable of booting Linux.
+- Cache size, TLB entries etc., are configurable.
+- Intergated PLIC, CLINT, uart, spi peripherals. 
+- Uses RISOF framework to run architecture compatibility tests.
 
 ### Core Block Diagram
 <img src="docs/soc.png" alt="soc" width="700"/>
-
 
 The pictorial representation of memory map is in the following picture.
 
 <img src="docs/mem_map.png" alt="mem_map" width="600"/>
 
-The `linker.ld` file has the memory defination as follows.
-```
-MEMORY
-{ 
-  FLASH_INST (rx) : ORIGIN = 0x00000000, LENGTH = 2K
-  FLASH_BOOT (rx) : ORIGIN = 0x00007000, LENGTH = 1K
-  RAM       (rwx) : ORIGIN = 0x00001000, LENGTH = 2K
-}
-```
 # Getting Started
 
 Install RISC-V [toolchain](https://github.com/riscv-collab/riscv-gnu-toolchain) and [verilator](https://verilator.org/guide/latest/install.html). These tools can be built by following the instructions in the corresponding links, or can be installed directly by running the following command
