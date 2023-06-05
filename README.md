@@ -10,12 +10,14 @@ UETRV_Pcore is a RISC-V based application class SoC integrating a 5-stage pipeli
 - Intergated PLIC, CLINT, uart, spi peripherals. 
 - Uses RISOF framework to run architecture compatibility tests.
 
-### Core Block Diagram
+### Core and SoC Block Diagram
+A simplified pipeline block diagram is shown below.
+
+<img src="docs/pipeline.png" alt="pipeline" width="700"/>
+
+The SoC block diagram shows the connectivity of the core with different peripherals using system bus.
+
 <img src="docs/soc.png" alt="soc" width="700"/>
-
-The pictorial representation of memory map is in the following picture.
-
-<img src="docs/mem_map.png" alt="mem_map" width="600"/>
 
 # Getting Started
 
@@ -51,4 +53,4 @@ The `imem` and `max_cycles` may be overwritten in Makefile using.
 
 ### Verification
 
-UET_Pcore uses RISOF framework to run Architecture Compatibility Tests (ACTs). Instructions to run these tests can be followed in [verif](/verif/) directory.
+UETRV_Pcore uses RISOF framework to run Architecture Compatibility Tests (ACTs). Instructions to run these tests can be followed in [verif](/verif/) directory.
