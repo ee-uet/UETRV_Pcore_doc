@@ -17,7 +17,7 @@ A simplified pipeline block diagram is shown below.
 
 The SoC block diagram shows the connectivity of the core with different peripherals using system bus.
 
-<img src="docs/soc.png" alt="soc" width="700"/>
+<img src="docs/soc.png" alt="soc" width="350"/>
 
 ### SoC Memory Map
 The memory map of the SOC is provided in the following table.
