@@ -1,7 +1,7 @@
-## UETRV_Pcore  
+# UETRV_Pcore  
 UETRV_Pcore is a RISC-V based application class SoC integrating a 5-stage pipelined processor with memory and peripherals. Currently, the core implements RV32IMAZicsr ISA based on User-level ISA Version 2.0 and Privileged Architecture Version 1.11 supporting M/S/U modes. Following are the key features of the SoC:
 
-### Key Features
+## Key Features
 - 32-bit RISC-V ISA core that supports base integer (I) and multiplication and division (M), atomic (A) and Zicsr (Z) extensions (RV32IMAZicsr).
 - Supports user, supervisor and machine mode privilege levels.
 - Support for instruction / data (writeback) caches.
@@ -10,7 +10,7 @@ UETRV_Pcore is a RISC-V based application class SoC integrating a 5-stage pipeli
 - Intergated PLIC, CLINT, uart, spi peripherals. 
 - Uses RISOF framework to run architecture compatibility tests.
 
-### Core and SoC Block Diagram
+## System Design
 A simplified pipeline block diagram is shown below.
 
 <img src="docs/pipeline.png" alt="pipeline" width="700"/>
@@ -18,6 +18,21 @@ A simplified pipeline block diagram is shown below.
 The SoC block diagram shows the connectivity of the core with different peripherals using system bus.
 
 <img src="docs/soc.png" alt="soc" width="700"/>
+
+### SoC Memory Map
+The memory map of the SOC is provided in the following table.
+| Base Address        |    Description            |   Attributes    |
+|:-------------------:|:-------------------------:|:---------------:|
+| 0x8000_0000         |      Memory               |      R-X-W      |
+| 0x9000_0000         |      UART                 |      R-W        |
+| 0x9400_0000         |      PLIC                 |      R-W        |
+| 0x9C00_0000         |      SPI                  |      R-W        |
+| 0x0200_0000         |      CLINT                |      R-W        |
+| 0x0000_1000         |      Boot Memory          |      R-X        |
+
+- `R: Read access`
+- `W: Write access`
+- `X: Execute access`
 
 # Getting Started
 
