@@ -46,12 +46,31 @@ The core and SoC design details are outlined in the following subsections.
 - Booting and peripherals
 
 ### Instruction fetch and decode stages
-Instruction fetch and decode stages
+The instruction fetch stage of the pipeline reads instructions either from the boot memory (`bmem`) or from the instruction cache (`icache`). The default/reset value of the program counter (PC) starts execution from `bmem`, which normally contains the zero-order bootloader. After booting, the PC jumps to the main memory region to start user program execution. 
+
+If virtualization is turned on then both virtual-to-physical address translation (using memory management unit (MMU)) as well as fetching the instructions from `icache` are performed during fetch stage. Cascading the two key operation can easily make this phase to become crtical path. An instruction page fault exception from the MMU (due to failuare of virtual address translation) enters the pipeline at fetch stage.    
+
+The decode stage performs instruction decoding as well as operand fetching from the register-file. The register file write operation is performed on the falling edge of the clock to reduce the hardware cost of full forwarding.  
+
 ### Execute stage and M-extension
+Execute stage implements all the integer ALU operations required by the base RV32I. The forwarding multiplexer is implemented in the execute stage. The input operands to the M-extension are provided by the execute stage, while the result from M-extension is provided to the memory stage. M-extension uses a multi-cycle implementation.  
 
 ### Memory and writeback stages
+Memory stage houses load-store-unit (LSU), control-status-register (CSR) register-file and A-extension. LSU module performs load/store operaions from/to dcache as well as peripheral devices, using data bus. The load/store operations from/to peripheral devices are non-cacheable.
+
+The memory stage also implements the CSR read/write operations including exception/interrupt handling. External interrupts are asynchronous and require synchronization for  their precise handling. An approach based on interrupt continuable instruction is followed for percise interrupt handling. For that purpose, the interrupt is put on hold if the pipeline was either stalled or being flushed at the time of occurrence of the interrupt.    
 
 ### Pipeline controller
+Key operations performed by the pipeline controller involve forwarding/stalling/flushing of the pipeline stages. The current version implements full forwarding. LSU operations lead to one stall cycle. In case of load use hazard, forwarding is always performed from the writeback stage and results in an extra stall cycle. Below are some possible scenarios leading to pipeline stalls.
+- Fetch/decode/execute/memory stages stall due to data TLB miss, dcache miss, executing atomic and other A-extension instructions
+- Fetch/decode/execute/memory stages stall due to M-extension operation 
+- Fetch stage stall due to icache miss 
+
+Pipeline is flushed due to:
+- Execution of jump or conditional-branch instruction
+- Exception or interrupt handling
+
+Execution of a jump or conditional-branch instruction leads to flushing fetch and decode stages of the pipeline. In case of an exception or interrupt fetch, decode and execute stages of the pipeline are flushed.
 
 ### MMU details
 
