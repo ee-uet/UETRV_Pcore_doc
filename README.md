@@ -1,4 +1,4 @@
-# UETRV_Pcore: Design Document  
+# UETRV_Pcore
 UETRV_Pcore is a RISC-V based application class SoC integrating a 5-stage pipelined processor with memory and peripherals. Currently, the core implements RV32IMAZicsr ISA based on User-level ISA Version 2.0 and Privileged Architecture Version 1.11 supporting M/S/U modes. Following are the key features of the SoC:
 
 ## Introduction
@@ -15,11 +15,11 @@ UETRV_Pcore is a RISC-V based application class SoC integrating a 5-stage pipeli
 ### System Design Overview
 The UETRV_Pcore is an applicaion class processor capable of running Linux. A simplified 5-stage pipelined block diagram is shown below. The M-extension is implemented as a coprocessor while memory-management-unit (MMU) module is shared by instruction and data memory (alternatively called load-store-unit (LSU)) interfaces of the pipeline. Specifically, the page-table-walker (PTW) of the MMU is shared and there are separate TLBs (translation look aside buffers) for instruction and data memory interfaces. The A-extension is implemented as part of the LSU module.
 
-<img src="docs/pipeline.png" alt="pipeline" width="800"/>
+<img src="./docs/pipeline.png" alt="pipeline" width="800"/>
 
 The SoC block diagram shows the connectivity of the core with memory sub-system as well as different peripherals using data bus. The boot memory is connected to both instruction and data buses of the core using a bus multiplexer. The instruction and data caches share the main memory using a bus arbiter. Different necessary peripherals are connected using the data bus. 
 
-<img src="docs/soc.png" alt="soc" width="500"/>
+<img src="./docs/soc.png" alt="soc" width="500"/>
 
 ### SoC Memory Map
 The memory map for the SOC is provided in the following table.
