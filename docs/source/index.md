@@ -3,21 +3,20 @@
 % You can adapt this file completely to your liking, but it should at least
 % contain the root `toctree` directive.
 
-```{include} ../../README.md
+<!-- ```{include} ../../README.md
 :relative-images:
 ```
 
-<!-- Check out {doc}`/usage` for further information,
-and {ref}`Installation` for installation instructions.
+```{include} ./user_guide.md
+:relative-images:
+``` -->
 
-```{warning}
-This library is under active development.
-```
+Welcome to the Documentation of UETRV-PCore
 
 ```{toctree}
 :caption: 'Contents:'
-:maxdepth: 2
+:numbered:
+user_guide/index.md
+design_document/index.md
+```
 
-usage
-notebooks/tutorial
-``` -->
