@@ -93,7 +93,7 @@ The MMU module implements separate TLBs for instruction and data memory interfac
 ### Booting and Peripherals
 On processor reset, the first instruction executed depends on the PC reset value defined by the user configuration parameter `PC_RESET` defined in `config_parameters.svh` in the `rtl\defines`. The default value of the parameter `PC_RESET` is `0x00001000`, which is the starting address of the boot memory. The boot memroy is read only and is preinitialized with the zero-level boot loader (ZLBL). The ZLBL usually contains early system initializtions including some interface intialization required for loading either next level boot loader or user application. The boot memory can be accessed either from instruction or from data bus interface. Since boot memory is single port memory, a bus multiplexer is used to interface it with both instruction and data bus interfaces.   
 
-Curerntly the following peripherals are integrated with the processor core using the data bus interface. All these interfaces are non-cacheable and their address map is available in the [`memory map`](##Introduction).  
+Curerntly the following peripherals are integrated with the processor core using the data bus interface. All these interfaces are non-cacheable and their address map is available in the [`memory map`](## Introduction).  
 - PLIC (platform level interrupt controller)
 - CLINT (core level interruptor)
 - UART
