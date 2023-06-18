@@ -53,7 +53,7 @@ If virtualization is turned on then both virtual-to-physical address translation
 The decode stage performs instruction decoding as well as operand fetching from the register-file. The register file write operation is performed on the falling edge of the clock to reduce the hardware cost of full forwarding.  
 
 ### Execute Stage and M-extension
-Execute stage implements all the integer ALU operations required by the base RV32I. The forwarding multiplexer is implemented in the execute stage. The input operands to the M-extension are provided by the execute stage, while the result from M-extension is provided to the memory stage. M-extension uses a multi-cycle implementation.  
+Execute stage implements all the integer ALU operations required by the base RV32I. The forwarding multiplexer is implemented in the execute stage. The input operands to the M-extension are provided by the execute stage, while the result from M-extension is provided to the memory stage. The multiplication instructions are implemented using fast multiplier, while the division and remainder instructions are implemented using a multi-cycle implementation.  
 
 ### Memory and Writeback Stages
 Memory stage houses load-store-unit (LSU), control-status-register (CSR) register-file and A-extension. LSU module performs load/store operaions from/to dcache as well as peripheral devices, using data bus. The load/store operations from/to peripheral devices are non-cacheable. The LSU module does not support misaligned accesses. When virtualization is enabled LSU module interacts with the MMU module using dedicated request response channel, for address translation. Further details regarding virtual address translation are provided later in MMU module related subsection.
