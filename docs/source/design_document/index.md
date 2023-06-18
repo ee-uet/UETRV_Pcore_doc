@@ -42,25 +42,36 @@ The core and SoC design details are outlined in the following subsections.
 - Execute stage and M-extension
 - Memory and writeback stages
 - Pipeline controller
-- MMU details
+- Memory management unit (MMU) details
 - Booting and peripherals
 
-### Instruction fetch and decode stages
+### Instruction Fetch and Decode Stages
 The instruction fetch stage of the pipeline reads instructions either from the boot memory (`bmem`) or from the instruction cache (`icache`). The default/reset value of the program counter (PC) starts execution from `bmem`, which normally contains the zero-order bootloader. After booting, the PC jumps to the main memory region to start user program execution. 
 
 If virtualization is turned on then both virtual-to-physical address translation (using memory management unit (MMU)) as well as fetching the instructions from `icache` are performed during fetch stage. Cascading the two key operation can easily make this phase to become crtical path. An instruction page fault exception from the MMU (due to failuare of virtual address translation) enters the pipeline at fetch stage.    
 
 The decode stage performs instruction decoding as well as operand fetching from the register-file. The register file write operation is performed on the falling edge of the clock to reduce the hardware cost of full forwarding.  
 
-### Execute stage and M-extension
+### Execute Stage and M-extension
 Execute stage implements all the integer ALU operations required by the base RV32I. The forwarding multiplexer is implemented in the execute stage. The input operands to the M-extension are provided by the execute stage, while the result from M-extension is provided to the memory stage. M-extension uses a multi-cycle implementation.  
 
-### Memory and writeback stages
-Memory stage houses load-store-unit (LSU), control-status-register (CSR) register-file and A-extension. LSU module performs load/store operaions from/to dcache as well as peripheral devices, using data bus. The load/store operations from/to peripheral devices are non-cacheable.
+### Memory and Writeback Stages
+Memory stage houses load-store-unit (LSU), control-status-register (CSR) register-file and A-extension. LSU module performs load/store operaions from/to dcache as well as peripheral devices, using data bus. The load/store operations from/to peripheral devices are non-cacheable. The LSU module does not support misaligned accesses. When virtualization is enabled LSU module interacts with the MMU module using dedicated request response channel, for address translation. Further details regarding virtual address translation are provided later in MMU module related subsection.
 
+#### A-extension  
+The execution of A-extension instructions is a multi-cycle operation and leads to pipeline stall. There are two groups of instructions in A-extension. First group comprise of atomic-memory-operation (AMO) instructions while second group involves load-reserved (LR) and store-conditional (SC) instructions.
+
+The AMO instructions involve the following three phases:
+- Loading one operand from memory
+- Performing the (requested) operation
+- Storing the result to memory (at the same address used by load operation in the first phase)
+
+The LR and SC instructions work as a pair. When an LR instruction is executed it requires temporary storage for holding both the address as well as the data. For that purpose we have implemented a **single entry buffer** that becomes occupied on executing an LR instruction. The buffer remains occupied until a corresponding SC instruction is executed. The buffer is freed irrespective of the fact that SC instruction execution was successful. Using a single entry buffer does not limit the performance, assuming nested LR instructions are not permitted.    
+
+#### CSR Module
 The memory stage also implements the CSR read/write operations including exception/interrupt handling. External interrupts are asynchronous and require synchronization for  their precise handling. An approach based on interrupt continuable instruction is followed for percise interrupt handling. For that purpose, the interrupt is put on hold if the pipeline was either stalled or being flushed at the time of occurrence of the interrupt.    
 
-### Pipeline controller
+### Pipeline Controller
 Key operations performed by the pipeline controller involve forwarding/stalling/flushing of the pipeline stages. The current version implements full forwarding. LSU operations lead to one stall cycle. In case of load use hazard, forwarding is always performed from the writeback stage and results in an extra stall cycle. Below are some possible scenarios leading to pipeline stalls.
 - Fetch/decode/execute/memory stages stall due to data TLB miss, dcache miss, executing atomic and other A-extension instructions
 - Fetch/decode/execute/memory stages stall due to M-extension operation 
@@ -72,6 +83,11 @@ Pipeline is flushed due to:
 
 Execution of a jump or conditional-branch instruction leads to flushing fetch and decode stages of the pipeline. In case of an exception or interrupt fetch, decode and execute stages of the pipeline are flushed.
 
-### MMU details
+### MMU Details
+The memory management unit (MMU) is responsible for address translation when activated by configuring the corresponding CSR (i.e. **satp** register) and ensuring that the current privilege mode is lower than the machine mode. Enabling address translation also requires the ability to handle page faults. The MMU implements page-based 32-bit virtual-memory system conforming to Sv32 specifications. The MMU module interfaces with the LSU and fetch modules are shown in the accompanying figure below.
 
-### Booting and peripherals
+![mmu](../images/mmu.png)
+
+The MMU module implements separate TLBs for instruction and data memory interfaces along with a shared hardware page table walker (PTW). It is possible that we encounter both ITLB as well as DTLB misses during the same cycle. In that case, the hardware PTW arbitrates the address translation requests and prioritises DTLB miss over ITLB miss. 
+
+### Booting and Peripherals
