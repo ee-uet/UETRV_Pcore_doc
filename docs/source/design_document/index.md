@@ -69,7 +69,11 @@ The AMO instructions involve the following three phases:
 The LR and SC instructions work as a pair. When an LR instruction is executed it requires temporary storage for holding both the address as well as the data. For that purpose we have implemented a **single entry buffer** that becomes occupied on executing an LR instruction. The buffer remains occupied until a corresponding SC instruction is executed. The buffer is freed irrespective of the fact that SC instruction execution was successful. Using a single entry buffer does not limit the performance, assuming nested LR instructions are not permitted.    
 
 #### CSR Module
-The memory stage also implements the CSR read/write operations including exception/interrupt handling. External interrupts are asynchronous and require synchronization for  their precise handling. An approach based on interrupt continuable instruction is followed for percise interrupt handling. For that purpose, the interrupt is put on hold if the pipeline was either stalled or being flushed at the time of occurrence of the interrupt.    
+The memory stage also implements the CSR read/write operations including exception and interrupt handling. The CSR read and write operations are performed in the same cycle. Since the write back stage is never stalled, it is safe to retire CSR and memory write operations in the memory stage (rather writeback/commit stage).
+
+The CSR module is responsible for the implementation of privileged architecture of the RISC V specifications. The module implements M (machine), S (supervisor) and U (user/application) privileged levels.  
+
+External interrupts are asynchronous and require synchronization for their precise handling. An approach based on interrupt continuable instruction is followed for percise interrupt handling. For that purpose, the interrupt is put on hold if the pipeline was either stalled or being flushed at the time of occurrence of the interrupt.    
 
 ### Pipeline Controller
 Key operations performed by the pipeline controller involve forwarding/stalling/flushing of the pipeline stages. The current version implements full forwarding. LSU operations lead to one stall cycle. In case of load use hazard, forwarding is always performed from the writeback stage and results in an extra stall cycle. Below are some possible scenarios leading to pipeline stalls.
@@ -81,7 +85,7 @@ Pipeline is flushed due to:
 - Execution of jump or conditional-branch instruction
 - Exception or interrupt handling
 
-Execution of a jump or conditional-branch instruction leads to flushing fetch and decode stages of the pipeline. In case of an exception or interrupt fetch, decode and execute stages of the pipeline are flushed.
+Execution of a jump or conditional-branch instruction leads to flushing the fetch and decode stages of the pipeline. In case of an exception or interrupt, fetch, decode and execute stages of the pipeline are flushed. Additionally, in case of interrupts (not exceptions) the memory (lsu) stage is flushed too.
 
 ### MMU Details
 The memory management unit (MMU) is responsible for address translation when activated by configuring the corresponding CSR (i.e. **satp** register) and ensuring that the current privilege mode is lower than the machine mode. Enabling address translation also requires the ability to handle page faults. The MMU implements page-based 32-bit virtual-memory system conforming to Sv32 specifications. The MMU module interfaces with the LSU and fetch modules are shown in the accompanying figure below.
