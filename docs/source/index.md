@@ -3,6 +3,7 @@
 % You can adapt this file completely to your liking, but it should at least
 % contain the root `toctree` directive.
 
+# Welcome to UETRV-PCore documentation (version "|version|")!
 <!-- ```{include} ../../README.md
 :relative-images:
 ```
@@ -10,8 +11,6 @@
 ```{include} ./user_guide.md
 :relative-images:
 ``` -->
-
-Welcome to the Documentation of UETRV-PCore
 
 ```{toctree}
 :caption: 'Contents:'
