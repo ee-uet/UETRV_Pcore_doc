@@ -95,7 +95,33 @@ Execution of a jump or conditional-branch instruction leads to flushing the fetc
 ### D-Cache
 The data cache (DCache) is a direct-mapped cache with a write-back policy. It consists of 2048 sets (DCACHE_SETS=2048), each indexed using 11 bits (DCACHE_INDEX_BITS=11). The cache line width is 128 bits (DCACHE_LINE_WIDTH=128), supporting efficient memory transactions. The address width is 32 bits (DCACHE_ADDR_WIDTH=32), aligning with typical RISC-V system architectures. Data width is also 32 bits (DCACHE_DATA_WIDTH=32), ensuring compatibility with word-based memory operations. The offset field is 4 bits (DCACHE_OFFSET_BITS=4), allowing selection within a cache line. The tag field is 17 bits (DCACHE_TAG_BITS=17), ensuring correct address mapping, with the least significant bit of the tag index at 2047 (DCACHE_TAG_LSB=2047). This configuration ensures optimized memory access latency and efficient cache utilization, minimizing memory stalls and improving overall processor performance.
 
+![D-Cache Top Diagram](../images/D-Cache_Top_Diagram.PNG)
 
+The datapath of Dcache is shown below:
+
+![D-Cache Datapath Diagram](../images/D-Cache_Datapath_Diagram.PNG)
+
+The detailed table for datapath is given as:
+
+![D-Cache Datapath Table](../images/D-Cache_Datapath_Table.PNG)
+
+The controller of Dcache is shown as:
+
+![D-Cache Controller Diagram](../images/D-Cache_Controller_Diagram.PNG)
+
+The detailed table for controller is given as:
+
+![D-Cache Controller Diagram](../images/D-Cache_Controller_Table.PNG)
+
+The state machine of Dcache is shown below:
+
+![D-Cache State Machine Diagram](../images/D-Cache_State_Machine.PNG)
+
+The detailed table for state machine is given as:
+
+![D-Cache State Machine Table](../images/D-Cache_State_Machine_Table.PNG)
+
+### I-Cache
 
 ### MMU Details
 The memory management unit (MMU) is responsible for address translation when activated by configuring the corresponding CSR (i.e. **satp** register) and ensuring that the current privilege mode is lower than the machine mode. Enabling address translation also requires the ability to handle page faults. The MMU implements page-based 32-bit virtual-memory system conforming to Sv32 specifications. The MMU module interfaces with the LSU and fetch modules are shown in the accompanying figure below.
