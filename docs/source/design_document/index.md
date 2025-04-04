@@ -45,6 +45,10 @@ The core and SoC design details are outlined in the following subsections.
 - Memory management unit (MMU) details
 - Booting and peripherals
 
+The pipeline_top diagram shows these stages as:
+
+![Pipeline_top](../images/Pipeline_top.png)
+
 ### Instruction Fetch and Decode Stages
 The instruction fetch stage of the pipeline reads instructions either from the boot memory (`bmem`) or from the instruction cache (`icache`). The default/reset value of the program counter (PC) starts execution from `bmem`, which normally contains the zero-order bootloader. After booting, the PC jumps to the main memory region to start user program execution. 
 
@@ -86,6 +90,9 @@ Pipeline is flushed due to:
 - Exception or interrupt handling
 
 Execution of a jump or conditional-branch instruction leads to flushing the fetch and decode stages of the pipeline. In case of an exception or interrupt, fetch, decode and execute stages of the pipeline are flushed. Additionally, in case of interrupts (not exceptions) the memory (lsu) stage is flushed too.
+
+
+### D-Cache
 
 ### MMU Details
 The memory management unit (MMU) is responsible for address translation when activated by configuring the corresponding CSR (i.e. **satp** register) and ensuring that the current privilege mode is lower than the machine mode. Enabling address translation also requires the ability to handle page faults. The MMU implements page-based 32-bit virtual-memory system conforming to Sv32 specifications. The MMU module interfaces with the LSU and fetch modules are shown in the accompanying figure below.
