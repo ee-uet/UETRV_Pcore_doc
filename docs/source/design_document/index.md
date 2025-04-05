@@ -42,6 +42,8 @@ The core and SoC design details are outlined in the following subsections.
 - Execute stage and M-extension
 - Memory and writeback stages
 - Pipeline controller
+- D-Cache
+- I-Cache
 - Memory management unit (MMU) details
 - Booting and peripherals
 
@@ -106,6 +108,12 @@ The cache operates within a 32-bit address space (DCACHE_ADDR_WIDTH = 32), in li
 
 This configuration offers optimized memory access latency and efficient cache utilization, minimizing memory stalls and enhancing overall processor performance.
 
+The structure of D-Cache in Pcore is shown as:
+
+![D-Cache Structure](../images/D-Cache_Structure.png)
+
+The top level diagram of D-Cache is given below:
+
 ![D-Cache Top Diagram](../images/D-Cache_Top_Diagram.PNG)
 
 The datapath of Dcache is shown below:
@@ -115,6 +123,10 @@ The datapath of Dcache is shown below:
 The detailed table for datapath is given as:
 
 ![D-Cache Datapath Table](../images/D-Cache_Datapath_Table.PNG)
+
+The detailed datapath is shown below:
+
+![D-Cache Detailed Datapath](../images/D-Cache_Detailed_Datapath.png)
 
 The controller of Dcache is shown as:
 
@@ -126,7 +138,7 @@ The detailed table for controller is given as:
 
 The state machine of Dcache is shown below:
 
-![D-Cache State Machine Diagram](../images/Dcache_Controller_Diagram.png)
+![D-Cache State Machine Diagram](../images/D-Cache_State_Machine_Diagram.png)
 
 The detailed table for state machine is given as:
 
@@ -135,12 +147,56 @@ The detailed table for state machine is given as:
 ### I-Cache
 The I-cache of the Pcore is designed as a 4-way set-associative cache, where each set at a specific index holds four cache lines (or "ways"). Each way at a specific index contains a valid bit and a tag field to determine whether the data stored corresponds to the requested address. The cache uses a 32-bit address space (XLEN = 32), and the cache line width is 128 bits (16 bytes). There are 2048 sets in total, requiring 11 bits (ICACHE_IDX_BITS = 11) to index into the cache. Each cache line contains 16 bytes, so 4 bits (ICACHE_OFFSET_BITS = 4) are used to select the byte offset within the line. The remaining 17 bits (ICACHE_TAG_BITS = 17) form the tag used for cache lookup and comparison. The tag field begins at bit position 15 (ICACHE_TAG_LSB = 15) of the address. This organization allows efficient instruction fetches by enabling parallel tag comparisons across the 4 ways of a selected set, supporting both fast access and good spatial locality.
 
+The top level diagram of I-Cache is given below:
+
+![I-Cache Top Diagram](../images/I-Cache_Top_Diagram.PNG)
+
+The detailed datapath is shown below:
+
+![I-Cache Detailed Datapath](../images/I-Cache_Detailed_Datapath.PNG)
+
+The state machine of I-Cache is shown below:
+
+![I-Cache State Machine Diagram](../images/I-Cache_State_Machine_Diagram.PNG)
+
+The detailed table for state machine is given as:
+
+![I-Cache State Machine Table](../images/I-Cache_State_Machine_Table.PNG)
+
+Similarly, the diagram for I-Cache Dataram is given as:
+
+![I-Cache Dataram](../images/I-Cache_Dataram_Detailed.PNG)
+
+Similarly, the diagram for I-Cache Tagram is given as:
+
+![I-Cache Tagram](../images/I-Cache_Tagram_Detailed.PNG)
+
+
 ### MMU Details
 The memory management unit (MMU) is responsible for address translation when activated by configuring the corresponding CSR (i.e. **satp** register) and ensuring that the current privilege mode is lower than the machine mode. Enabling address translation also requires the ability to handle page faults. The MMU implements page-based 32-bit virtual-memory system conforming to Sv32 specifications. The MMU module interfaces with the LSU and fetch modules are shown in the accompanying figure below.
 
 ![mmu](../images/mmu.png)
 
 The MMU module implements separate TLBs for instruction and data memory interfaces along with a shared hardware page table walker (PTW). It is possible that we encounter both ITLB as well as DTLB misses during the same cycle. In that case, the hardware PTW arbitrates the address translation requests and prioritises DTLB miss over ITLB miss. 
+
+The top level diagram of MMU is given below:
+
+![MMU Top Diagram](../images/MMU_Top_Diagram.PNG)
+
+The detailed datapath is shown below:
+
+![MMU Detailed Datapath](../images/MMU_Detailed_Datapath.PNG)
+
+#### PTW
+
+
+
+#### DTLB
+
+
+
+#### ITLB
+
 
 ### Booting and Peripherals
 On processor reset, the first instruction executed depends on the PC reset value defined by the user configuration parameter `PC_RESET` defined in `pcore_config_defs.svh` in the `rtl\defines`. The default value of the parameter `PC_RESET` is `0x00001000`, which is the starting address of the boot memory. The boot memroy is read only and is preinitialized with the zero-level boot loader (ZLBL). The ZLBL usually contains early system initializtions including some interface intialization required for loading either next level boot loader or user application. The boot memory can be accessed either from instruction or from data bus interface. Since boot memory is single port memory, a bus multiplexer is used to interface it with both instruction and data bus interfaces.   
