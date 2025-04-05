@@ -118,7 +118,7 @@ The detailed table for datapath is given as:
 
 The controller of Dcache is shown as:
 
-![D-Cache Controller Diagram](../images/D-Cache_Controller_Diagram.PNG)
+![D-Cache Controller Diagram](../images/Dcache_Controller_Diagram.PNG)
 
 The detailed table for controller is given as:
 
@@ -133,6 +133,7 @@ The detailed table for state machine is given as:
 ![D-Cache State Machine Table](../images/D-Cache_State_Machine_Table.PNG)
 
 ### I-Cache
+The I-cache of the Pcore is designed as a 4-way set-associative cache, where each set at a specific index holds four cache lines (or "ways"). Each way at a specific index contains a valid bit and a tag field to determine whether the data stored corresponds to the requested address. The cache uses a 32-bit address space (XLEN = 32), and the cache line width is 128 bits (16 bytes). There are 2048 sets in total, requiring 11 bits (ICACHE_IDX_BITS = 11) to index into the cache. Each cache line contains 16 bytes, so 4 bits (ICACHE_OFFSET_BITS = 4) are used to select the byte offset within the line. The remaining 17 bits (ICACHE_TAG_BITS = 17) form the tag used for cache lookup and comparison. The tag field begins at bit position 15 (ICACHE_TAG_LSB = 15) of the address. This organization allows efficient instruction fetches by enabling parallel tag comparisons across the 4 ways of a selected set, supporting both fast access and good spatial locality.
 
 ### MMU Details
 The memory management unit (MMU) is responsible for address translation when activated by configuring the corresponding CSR (i.e. **satp** register) and ensuring that the current privilege mode is lower than the machine mode. Enabling address translation also requires the ability to handle page faults. The MMU implements page-based 32-bit virtual-memory system conforming to Sv32 specifications. The MMU module interfaces with the LSU and fetch modules are shown in the accompanying figure below.
