@@ -50,11 +50,8 @@ UETRV_Pcore is a five stage pipeline which consists of the following stages:
 - decode
 - execute
 - load store unit(lsu)
-- control status register(csr)
 - writeback
-- forward_stall
-- divide
-- amo
+
 
 The figure below shows the top module level diagram of pipeline. 
 ![Pipeline_top](../images/Pipeline_top.png)
