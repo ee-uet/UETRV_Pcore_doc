@@ -118,7 +118,7 @@ The detailed table for datapath is given as:
 
 The controller of Dcache is shown as:
 
-![D-Cache Controller Diagram](../images/Dcache_Controller_Diagram.PNG)
+![D-Cache Controller Diagram](../images/D-Cache_Controller_Diagram.PNG)
 
 The detailed table for controller is given as:
 
@@ -126,7 +126,7 @@ The detailed table for controller is given as:
 
 The state machine of Dcache is shown below:
 
-![D-Cache State Machine Diagram](../images/D-Cache_State_Machine.PNG)
+![D-Cache State Machine Diagram](../images/Dcache_Controller_Diagram.png)
 
 The detailed table for state machine is given as:
 
