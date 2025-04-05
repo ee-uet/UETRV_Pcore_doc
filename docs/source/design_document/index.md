@@ -45,8 +45,18 @@ The core and SoC design details are outlined in the following subsections.
 - Memory management unit (MMU) details
 - Booting and peripherals
 
-The pipeline_top diagram shows these stages as:
+UETRV_Pcore is a five stage pipeline which consists of the following stages:
+- fetch
+- decode
+- execute
+- load store unit(lsu)
+- control status register(csr)
+- writeback
+- forward_stall
+- divide
+- amo
 
+The figure below shows the top module level diagram of pipeline. 
 ![Pipeline_top](../images/Pipeline_top.png)
 
 ### Instruction Fetch and Decode Stages
@@ -93,7 +103,7 @@ Execution of a jump or conditional-branch instruction leads to flushing the fetc
 
 
 ### D-Cache
-The data cache (DCache) is a direct-mapped cache with a write-back policy. It consists of 2048 sets (DCACHE_SETS=2048), each indexed using 11 bits (DCACHE_INDEX_BITS=11). The cache line width is 128 bits (DCACHE_LINE_WIDTH=128), supporting efficient memory transactions. The address width is 32 bits (DCACHE_ADDR_WIDTH=32), aligning with typical RISC-V system architectures. Data width is also 32 bits (DCACHE_DATA_WIDTH=32), ensuring compatibility with word-based memory operations. The offset field is 4 bits (DCACHE_OFFSET_BITS=4), allowing selection within a cache line. The tag field is 17 bits (DCACHE_TAG_BITS=17), ensuring correct address mapping, with the least significant bit of the tag index at 2047 (DCACHE_TAG_LSB=2047). This configuration ensures optimized memory access latency and efficient cache utilization, minimizing memory stalls and improving overall processor performance.
+The data cache (DCache) is a direct-mapped cache with a write-back policy. It consists of 2048 sets (DCACHE_SETS=2048), each indexed using 11 bits (DCACHE_INDEX_BITS=11). The cache line width is 128 bits (DCACHE_LINE_WIDTH=128), supporting efficient memory transactions. The address width is 32 bits (DCACHE_ADDR_WIDTH=32), aligning with typical RISC-V system architectures. Data width is also 32 bits (DCACHE_DATA_WIDTH=32), ensuring compatibility with word-based memory operations. The offset field is 4 bits (DCACHE_OFFSET_BITS=4), allowing selection within a cache line. The tag field is 17 bits (DCACHE_TAG_BITS=17), ensuring correct address mapping. This configuration ensures optimized memory access latency and efficient cache utilization, minimizing memory stalls and improving overall processor performance.
 
 ![D-Cache Top Diagram](../images/D-Cache_Top_Diagram.PNG)
 
