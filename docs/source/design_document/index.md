@@ -103,7 +103,11 @@ Execution of a jump or conditional-branch instruction leads to flushing the fetc
 
 
 ### D-Cache
-The data cache (DCache) is a direct-mapped cache with a write-back policy. It consists of 2048 sets (DCACHE_SETS=2048), each indexed using 11 bits (DCACHE_INDEX_BITS=11). The cache line width is 128 bits (DCACHE_LINE_WIDTH=128), supporting efficient memory transactions. The address width is 32 bits (DCACHE_ADDR_WIDTH=32), aligning with typical RISC-V system architectures. Data width is also 32 bits (DCACHE_DATA_WIDTH=32), ensuring compatibility with word-based memory operations. The offset field is 4 bits (DCACHE_OFFSET_BITS=4), allowing selection within a cache line. The tag field is 17 bits (DCACHE_TAG_BITS=17), ensuring correct address mapping. This configuration ensures optimized memory access latency and efficient cache utilization, minimizing memory stalls and improving overall processor performance.
+The Data Cache (DCache) is designed as a direct-mapped, write-back cache with byte-level accessibility, facilitated by the sel_byte signal. It comprises 2048 cache sets (DCACHE_SETS = 2048), which are indexed using 11 bits (DCACHE_INDEX_BITS = 11). Each cache line is 128 bits wide (DCACHE_LINE_WIDTH = 128), enabling efficient memory transactions and reducing latency for bulk data operations.
+
+The cache operates within a 32-bit address space (DCACHE_ADDR_WIDTH = 32), in line with typical RISC-V system architectures. It supports 32-bit data words (DCACHE_DATA_WIDTH = 32), ensuring compatibility with standard word-based memory operations. The offset field spans 4 bits (DCACHE_OFFSET_BITS = 4), allowing fine-grained selection within a cache line, while the 17-bit tag field (DCACHE_TAG_BITS = 17) provides robust address mapping and cache line identification.
+
+This configuration offers optimized memory access latency and efficient cache utilization, minimizing memory stalls and enhancing overall processor performance.
 
 ![D-Cache Top Diagram](../images/D-Cache_Top_Diagram.PNG)
 
