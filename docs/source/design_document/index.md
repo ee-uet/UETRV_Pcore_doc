@@ -126,7 +126,7 @@ The detailed table for datapath is given as:
 
 The detailed datapath is shown below:
 
-![D-Cache Detailed Datapath](../images/D-Cache_Detailed_Datapath.png)
+![D-Cache Detailed Datapath](../images/Dcache_Datapath_detailed.svg)
 
 The controller of Dcache is shown as:
 
@@ -145,15 +145,16 @@ The detailed table for state machine is given as:
 ![D-Cache State Machine Table](../images/D-Cache_State_Machine_Table.PNG)
 
 ### I-Cache
-The I-cache of the Pcore is designed as a 4-way set-associative cache, where each set at a specific index holds four cache lines (or "ways"). Each way at a specific index contains a valid bit and a tag field to determine whether the data stored corresponds to the requested address. The cache uses a 32-bit address space (XLEN = 32), and the cache line width is 128 bits (16 bytes). There are 2048 sets in total, requiring 11 bits (ICACHE_IDX_BITS = 11) to index into the cache. Each cache line contains 16 bytes, so 4 bits (ICACHE_OFFSET_BITS = 4) are used to select the byte offset within the line. The remaining 17 bits (ICACHE_TAG_BITS = 17) form the tag used for cache lookup and comparison. The tag field begins at bit position 15 (ICACHE_TAG_LSB = 15) of the address. This organization allows efficient instruction fetches by enabling parallel tag comparisons across the 4 ways of a selected set, supporting both fast access and good spatial locality.
+The I-cache of the Pcore is designed as a 4-way set-associative cache, where each set at a specific index holds four cache lines (or "ways"). Each way at a specific index contains a valid bit and a tag field to determine whether the data stored corresponds to the requested address. The cache uses a 32-bit address space (XLEN = 32), and the cache line width is 128 bits (16 bytes). There are 2048 sets in total, requiring 9 bits (ICACHE_IDX_BITS = 9) to index into the cache. Each cache line contains 16 bytes, so 4 bits (ICACHE_OFFSET_BITS = 4) are used to select the byte offset within the line. The remaining 22 bits (ICACHE_TAG_BITS = 22) form the tag used for cache lookup and comparison. The tag field begins at bit position 15 (ICACHE_TAG_LSB = 15) of the address. This organization allows efficient instruction fetches by enabling parallel tag comparisons across the 4 ways of a selected set, supporting both fast access and good spatial locality.
+
+
+The structure of I-Cache in Pcore is shown as:
+
+![D-Cache Structure](../images/Icache_Structure.png)
 
 The top level diagram of I-Cache is given below:
 
 ![I-Cache Top Diagram](../images/I-Cache_Top_Diagram.PNG)
-
-The detailed datapath is shown below:
-
-![I-Cache Detailed Datapath](../images/I-Cache_Detailed_Datapath.PNG)
 
 The state machine of I-Cache is shown below:
 
@@ -183,9 +184,6 @@ The top level diagram of MMU is given below:
 
 ![MMU Top Diagram](../images/MMU_Top_Diagram.PNG)
 
-The detailed datapath is shown below:
-
-![MMU Detailed Datapath](../images/MMU_Detailed_Datapath.PNG)
 
 #### PTW
 
