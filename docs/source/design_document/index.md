@@ -56,7 +56,7 @@ UETRV_Pcore is a five stage pipeline which consists of the following stages:
 
 
 The figure below shows the top module level diagram of pipeline. 
-![Pipeline_top](../images/Pipeline_top.png)
+![Pipeline_top_new](../images/Pipeline_top_new.svg)
 
 ### Instruction Fetch and Decode Stages
 The instruction fetch stage of the pipeline reads instructions either from the boot memory (`bmem`) or from the instruction cache (`icache`). The default/reset value of the program counter (PC) starts execution from `bmem`, which normally contains the zero-order bootloader. After booting, the PC jumps to the main memory region to start user program execution. 
@@ -120,9 +120,6 @@ The datapath of Dcache is shown below:
 
 ![D-Cache Datapath Diagram](../images/D-Cache_Datapath_Diagram.PNG)
 
-The detailed table for datapath is given as:
-
-![D-Cache Datapath Table](../images/D-Cache_Datapath_Table.PNG)
 
 The detailed datapath is shown below:
 
@@ -131,10 +128,6 @@ The detailed datapath is shown below:
 The controller of Dcache is shown as:
 
 ![D-Cache Controller Diagram](../images/D-Cache_Controller_Diagram.PNG)
-
-The detailed table for controller is given as:
-
-![D-Cache Controller Diagram](../images/D-Cache_Controller_Table.PNG)
 
 The state machine of Dcache is shown below:
 
@@ -178,7 +171,7 @@ The memory management unit (MMU) is responsible for address translation when act
 
 ![mmu](../images/mmu.png)
 
-The MMU module implements separate TLBs for instruction and data memory interfaces along with a shared hardware page table walker (PTW). It is possible that we encounter both ITLB as well as DTLB misses during the same cycle. In that case, the hardware PTW arbitrates the address translation requests and prioritises DTLB miss over ITLB miss. 
+The MMU module implements separate TLBs for instruction and data memory interfaces along with a shared hardware page table walker (PTW). It is possible that we encounter both ITLB as well as DTLB misses during the same cycle. 
 
 The top level diagram of MMU is given below:
 
@@ -187,13 +180,40 @@ The top level diagram of MMU is given below:
 
 #### PTW
 
+The hardware PTW arbitrates the address translation requests and prioritises DTLB miss over ITLB miss. 
+
+The top level diagram of PTW is given below:
+
+![D-Cache Top Diagram](../images/PTW_Top_Diagram.PNG)
+
+The detailed datapath of PTW is shown below:
+
+![D-Cache Datapath Diagram](../images/PTW_Detailed_Datapath.svg)
+
+The state machine of PTW is shown below:
+
+![PTW State Machine Diagram](../images/PTW_State_Machine_Diagram.PNG)
+
+The detailed table for state machine is given as:
+
+![D-Cache State Machine Table](../images/PTW_State_Machine_Table.PNG)
 
 
 #### DTLB
 
+The top level diagram of DTLB is given below:
+
+![DTLB Top Diagram](../images/DTLB_Top_Diagram.PNG)
+
+
 
 
 #### ITLB
+
+The top level diagram of ITLB is given below:
+
+![ITLB Top Diagram](../images/ITLB_Top_Diagram.PNG)
+
 
 
 ### Booting and Peripherals
