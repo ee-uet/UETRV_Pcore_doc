@@ -1,0 +1,3 @@
+sphinx>=5.0
+myst-parser
+sphinxcontrib-applehelp
