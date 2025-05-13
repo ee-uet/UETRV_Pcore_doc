@@ -123,7 +123,7 @@ The datapath of Dcache is shown below:
 
 The detailed datapath is shown below:
 
-![D-Cache Detailed Datapath](../images/Dcache_Datapath_detailed.svg)
+![D-Cache Detailed Datapath](../images/Dcache_detailed_datapath_new.svg)
 
 The controller of Dcache is shown as:
 
